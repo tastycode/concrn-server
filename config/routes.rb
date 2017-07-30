@@ -1,13 +1,21 @@
 Rails.application.routes.draw do
   mount_devise_token_auth_for 'User', at: 'api/auth'
+  mount ActionCable.server => '/cable'
 
   namespace :api do
+    resources :reports, only: [:create] do
+      resources :messages, only: [:index]
+      #member do
+        #get 'messages'
+      #end
+    end
+
     resources :reporters, only: [] do
     end
 
     resources :devices, only: [:create] do
       collection do
-        get 'validate'
+        post 'validate'
         post 'verify'
       end
     end

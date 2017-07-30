@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  report_id: 1
+  from_type: MyString
+  from_id: 1
+  to_type: MyString
+  to_id: 1
+  text: MyString
+  handler: MyString
+
+two:
+  report_id: 1
+  from_type: MyString
+  from_id: 1
+  to_type: MyString
+  to_id: 1
+  text: MyString
+  handler: MyString
