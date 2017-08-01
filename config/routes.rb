@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :reports, only: [:create] do
-      resources :messages, only: [:index]
+      resources :messages, only: [:index, :create]
       #member do
         #get 'messages'
       #end

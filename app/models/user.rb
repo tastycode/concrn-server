@@ -4,4 +4,13 @@ class User < ApplicationRecord
           :recoverable, :rememberable, :trackable,
           :omniauthable, :validatable
   include DeviseTokenAuth::Concerns::User
+
+
+  def name
+    nickname
+  end
+
+  def self.concrn
+    find_by(nickname: 'Concrn')
+  end
 end

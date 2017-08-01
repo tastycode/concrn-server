@@ -5,3 +5,6 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+#
+User.create(nickname: 'Concrn', email: 'admin@streetmom.com', password: 'streetmoms') unless User.find_by(nickname: 'Concrn').present?
+
