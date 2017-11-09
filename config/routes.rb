@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   mount ActionCable.server => '/cable'
 
   namespace :api do
-    resources :reports, only: [:create] do
+    resources :reports, only: [:create, :show, :index] do
       resources :messages, only: [:index, :create]
       #member do
         #get 'messages'

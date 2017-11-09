@@ -4,7 +4,7 @@ class Report < ApplicationRecord
   belongs_to :reporter
 
   def queue_initial_prompt
-    ReportPromptInitialJob.set(wait: 3.seconds).perform_later(self)
+    ReportPromptInitialJob.set(wait: (0.5).seconds).perform_later(self)
   end
 
   def handle(message)
