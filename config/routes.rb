@@ -10,6 +10,16 @@ Rails.application.routes.draw do
       #end
     end
 
+    resources :responders, only: [] do
+      collection do
+        get 'device'
+      end
+      member do
+        post 'status'
+      end
+    end
+
+
     resources :reporters, only: [] do
     end
 
