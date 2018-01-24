@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       #end
     end
 
-    resources :responders, only: [] do
+    resources :responders, only: [:update] do
       collection do
         get 'device'
       end
