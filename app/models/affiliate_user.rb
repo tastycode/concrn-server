@@ -1,0 +1,2 @@
+class AffiliateUser < ApplicationRecord
+end

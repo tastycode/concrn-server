@@ -6,7 +6,11 @@
 
 # Ignore bundler config.
 /.bundle
-db/data/*
+.env
+
+# Ignore the default SQLite database.
+/db/*.sqlite3
+/db/*.sqlite3-journal
 
 # Ignore all logfiles and tempfiles.
 /log/*
@@ -14,9 +18,8 @@ db/data/*
 !/log/.keep
 !/tmp/.keep
 
-/node_modules
-/yarn-error.log
-
 .byebug_history
-/public/packs
-/node_modules
+
+# Ignore encrypted secrets key file.
+config/secrets.yml.key
+config/secrets.yml

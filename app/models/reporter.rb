@@ -1,3 +1,4 @@
 class Reporter < ApplicationRecord
-  has_one :responder
+  belongs_to :user
+  has_many :reports
 end

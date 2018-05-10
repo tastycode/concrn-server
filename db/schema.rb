@@ -10,92 +10,96 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180123212523) do
+ActiveRecord::Schema.define(version: 20180427032455) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "devices", force: :cascade do |t|
-    t.integer "reporter_id"
-    t.string "device_id"
-    t.string "phone"
-    t.boolean "verified", default: false
+  create_table "affiliate_users", force: :cascade do |t|
+    t.integer "affiliate_id"
+    t.integer "user_id"
+    t.string "role"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "messages", force: :cascade do |t|
+  create_table "affiliates", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "devices", force: :cascade do |t|
+    t.string "user_id"
+    t.string "identifier"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "point_fences", force: :cascade do |t|
+    t.integer "fenceable_id"
+    t.string "fenceable_type"
+    t.decimal "lat"
+    t.decimal "long"
+    t.integer "radius"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "report_actions", force: :cascade do |t|
     t.integer "report_id"
-    t.string "from_type"
-    t.integer "from_id"
-    t.string "to_type"
-    t.integer "to_id"
-    t.string "text"
-    t.string "handler"
+    t.string "action"
+    t.jsonb "payload"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "reporters", force: :cascade do |t|
-    t.string "phone"
-    t.string "name"
+    t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "reports", force: :cascade do |t|
-    t.string "name"
-    t.integer "reporter_id"
-    t.decimal "long", precision: 10, scale: 6
-    t.decimal "lat", precision: 10, scale: 6
-    t.string "status", default: "pending"
-    t.text "nature"
-    t.string "age"
-    t.string "gender"
-    t.string "race"
+    t.decimal "lat"
+    t.decimal "long"
     t.string "address"
-    t.string "setting"
-    t.text "reporter_feedback"
-    t.text "responder_notes"
-    t.string "neighborhood"
-    t.string "urgency"
-    t.string "zip"
+    t.string "reporter_notes"
+    t.string "responder_reporter_notes"
+    t.string "responder_internal_notes"
+    t.boolean "is_harm_immediate"
+    t.integer "reporter_id"
+    t.integer "responder_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "next_handler"
+    t.string "status"
   end
 
   create_table "responders", force: :cascade do |t|
-    t.integer "reporter_id"
+    t.integer "user_id"
+    t.boolean "available"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "available", default: false
-    t.decimal "lat"
-    t.decimal "long"
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "provider", default: "email", null: false
-    t.string "uid", default: "", null: false
-    t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string "current_sign_in_ip"
-    t.string "last_sign_in_ip"
-    t.string "nickname"
-    t.string "image"
+    t.string "name"
+    t.string "phone"
     t.string "email"
-    t.json "tokens"
+    t.string "token"
+    t.datetime "token_issued_at"
+    t.string "refresh_token"
+    t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "phone"
-    t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
+  end
+
+  create_table "zip_fences", force: :cascade do |t|
+    t.integer "fenceable_id"
+    t.string "fenceable_type"
+    t.string "zip"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end

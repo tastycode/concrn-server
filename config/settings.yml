@@ -1,5 +1,0 @@
-authy:
-  default: &authy_default
-    key: 4VgjnsjENQS4F9To9qo5iEVsvfVLupS9
-  development:
-    <<: *authy_default
