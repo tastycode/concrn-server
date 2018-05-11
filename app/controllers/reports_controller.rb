@@ -23,7 +23,8 @@ class ReportsController < ApplicationController
   end
 
   def report_params
-    params = params.require(:data).permit(:type, {
+    p request.headers
+    params.require(:data).permit(:type, {
       attributes: [:lat, :long, :address, :reporter_notes, :is_harm_immediate, :reporter_phone]
     })
   end
