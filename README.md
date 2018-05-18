@@ -1,24 +1,22 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-Things you may want to cover:
+## Initial setup
 
-* Ruby version
+1. `docker-compose up --build`
+2. `docker-compose run web bundle exec rails db:create
+   db:migrate`
 
-* System dependencies
+## Editing secrets
 
-* Configuration
+`docker-compose run --rm -e EDITOR=vim web bundle exec rails
+secrets:edit`
 
-* Database creation
+## Running tests
 
-* Database initialization
+`docker-compose run -e RAILS_ENV=test web rspec`
 
-* How to run the test suite
+## Running `rails` commands
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Use the oh-so-long but temporarily necessary invocation `docker-compose
+run web bundle exec`

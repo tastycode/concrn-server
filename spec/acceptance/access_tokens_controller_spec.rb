@@ -6,7 +6,6 @@ resource 'Tokens' do
   route '/tokens', 'Token management' do
     attribute :phone, "Device's phone number", required: true
 
-
     delete 'Logging out' do
       header 'Authorization', :authorization
       let(:user) { build(:user) }
@@ -26,6 +25,21 @@ resource 'Tokens' do
       example 'Resets token' do
         do_request(request)
         expect(status).to eq(204)
+      end
+    end
+
+    post 'Logging in via email' do
+      let(:user) { create(:user) }
+      let(:request) do
+        {
+          email: user.email,
+          password: "securepassword"
+        }
+      end
+
+      example 'Provides a token' do
+        do_request request
+        expect(json["jwt"]).to be_present
       end
     end
   end

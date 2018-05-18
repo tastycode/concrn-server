@@ -1,5 +1,6 @@
 FROM ruby:2.3.4
-RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs
+# vim is required for rails secrets:edit within the container
+RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs vim
 RUN mkdir /app
 WORKDIR /app
 COPY Gemfile /app/Gemfile

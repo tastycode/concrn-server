@@ -1,6 +1,19 @@
 class AccessTokensController < ApplicationController
   before_action :require_auth, only: %i(destroy current validate)
 
+  def create
+    email, password = params.require(%i(email password))
+    if user = User.valid_email_login?(email, password)
+      user.regenerate_token_with_expiration
+      render json: {
+        jwt: user.token,
+        refresh_token: user.refresh_token
+      }, status: :created
+    else
+      head :forbidden
+    end
+  end
+
   def validate
     head :ok
   end
