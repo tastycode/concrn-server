@@ -4,8 +4,8 @@ module Admin
     before_action :require_auth
 
     def require_admin
-      authorized_roles = (%w(admin affiliate_admin affiliate_dispatcher) & current_user.roles)
-      head :forbidden unless authorized_roles.any?
+      authorized_role = (%w(admin affiliate_admin affiliate_dispatcher).include?(current_user.role))
+      head :forbidden unless authorized_role
     end
 
     def jsonapi_index_response(scope:, url_method:, serializer: nil, serializer_options: default_serializer_options)
@@ -26,17 +26,17 @@ module Admin
       json.merge(pagination)
     end
 
-    def default_index(model: default_model, url_method: nil)
-      url_method ||= "admin_#{model.to_s.underscore.pluralize}_url"
-      records = model.all.order(DEFAULT_SORT)
+    def default_index
+      url_method ||= "admin_#{default_model.to_s.underscore.pluralize}_url"
+      records = default_scope.order(DEFAULT_SORT)
       render json: jsonapi_index_response(
         scope: records,
         url_method: url_method
       )
     end
 
-    def default_update(model: default_model)
-      record = model.find(params[:id])
+    def default_update
+      record = default_scope.find(params[:id])
       record.update_attributes(record_params)
       if record.valid?
         render json: record, serializer: default_serializer(model: default_model)
@@ -45,8 +45,8 @@ module Admin
       end
     end
 
-    def default_create(model: default_model)
-      record = model.create(record_params)
+    def default_create
+      record = default_model.create(record_params)
       if record.valid?
         render json: record, serializer: default_serializer(model: default_model)
       else
@@ -54,13 +54,13 @@ module Admin
       end
     end
 
-    def default_show(model: default_model)
-      record = model.find(params[:id])
+    def default_show
+      record = default_scope.find(params[:id])
       render json: record, serializer: default_serializer(model: default_model), **default_serializer_options
     end
 
-    def default_destroy(model: default_model)
-      record = model.find(params[:id])
+    def default_destroy
+      record = default_scope.find(params[:id])
       record.destroy
       head :no_content
     end
@@ -75,6 +75,10 @@ module Admin
 
     def default_model
       self.class.const_get(:MODEL)
+    end
+
+    def default_scope
+      default_model.all
     end
 
     def record_params

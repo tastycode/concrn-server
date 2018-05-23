@@ -10,18 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180517021322) do
+ActiveRecord::Schema.define(version: 20180523144712) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "affiliate_users", force: :cascade do |t|
-    t.integer "affiliate_id"
-    t.integer "user_id"
-    t.string "role"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
   create_table "affiliates", force: :cascade do |t|
     t.string "name"
@@ -90,9 +82,11 @@ ActiveRecord::Schema.define(version: 20180517021322) do
     t.datetime "token_issued_at"
     t.string "refresh_token"
     t.string "password_digest"
+    t.string "affiliate_id"
+    t.string "affiliate_role"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "roles", default: [], array: true
+    t.string "role"
   end
 
   create_table "zip_fences", force: :cascade do |t|

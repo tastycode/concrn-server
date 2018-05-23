@@ -1,6 +1,5 @@
 class User < ApplicationRecord
-  has_many :affiliate_users
-  has_many :affiliates, through: :affiliate_user
+  belongs_to :affiliate, optional: true
   has_one :reporter
   has_one :responder
 
@@ -10,6 +9,10 @@ class User < ApplicationRecord
 
   def invalidate_token
     self.update_attributes(token: nil, token_issued_at: nil)
+  end
+
+  def affiliate?
+    role =~ /affiliate/
   end
 
   def self.valid_email_login?(email, password)

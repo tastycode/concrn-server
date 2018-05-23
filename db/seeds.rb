@@ -9,5 +9,6 @@ User.create(
   name: "Tommy Savage",
   phone: "415-603-1994",
   email: "admin@concrn.org",
-  password: "negociosdemusica"
+  password: "negociosdemusica",
+  role: "admin"
 )

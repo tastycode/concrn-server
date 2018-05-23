@@ -5,10 +5,9 @@ class AccessTokensController < ApplicationController
     email, password = params.require(%i(email password))
     if user = User.valid_email_login?(email, password)
       user.regenerate_token_with_expiration
-      render json: {
-        jwt: user.token,
-        refresh_token: user.refresh_token
-      }, status: :created
+      includes = user.affiliate? ? %i(affiliate) : []
+      p "includes", user.affiliate?
+      render json: user, serializer: UserAuthSerializer, include: includes, status: :created
     else
       head :forbidden
     end

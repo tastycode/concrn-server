@@ -11,7 +11,6 @@ Rails.application.routes.draw do
   post '/tokens', to: 'access_tokens#create'
 
   namespace :admin do
-    resources :affiliate_users
     resources :affiliates
     resources :reports
     resources :users
