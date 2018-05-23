@@ -1,20 +1,16 @@
-module Admin
-  class ReportsController < Admin::Controller
-    def index
-      reports = Report.all.order("created_at desc")
-      json = JSON.parse(
-        ActiveModelSerializers::SerializableResource.new(
-          reports, 
-          each_serializer: Admin::ReportSerializer,
-          include: ['reporter.user']
-        ).to_json
-      )
-      pagination = JsonPagination.paginate(
-        scope: reports,
-        url_method: :admin_reports_url,
-        page_number: params[:page][:number] || 1,
-        page_size: params[:page][:size] || 10)
-      render json: json.merge(pagination)
-    end
+class Admin::ReportsController < Admin::Controller
+  MODEL = User
+  PERMITTED_PARAMS = %i(name phone email password)
+  default_actions(%i(show update destroy))
+
+  def index
+    reports = Report.all.order("created_at desc")
+    render json: jsonapi_index_response(
+      scope: reports,
+      url_method: :admin_users_path,
+      serializer_options: {
+        include: ['reporter.user']
+      }
+    )
   end
 end

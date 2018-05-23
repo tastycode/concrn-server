@@ -34,7 +34,6 @@ class JsonPagination
   end
 
   def page_count
-    p "page_count", scope_count, page_size.to_f, (scope_count / page_size.to_f).ceil
     (scope_count / page_size.to_f).ceil
   end
 

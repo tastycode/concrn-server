@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_many :affiliate_users
   has_many :affiliates, through: :affiliate_user
   has_one :reporter
   has_one :responder
