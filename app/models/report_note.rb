@@ -1,0 +1,2 @@
+class ReportNote < ApplicationRecord
+end

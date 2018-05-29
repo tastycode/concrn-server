@@ -12,10 +12,12 @@ class DevicesController  < ApplicationController
 
   def verify
     phone = ::PhoneNumber.normalize(params[:phone])
+
     result = Authy::PhoneVerification.check(verification_code: params[:code], country_code: 1, phone_number: phone)
     if result.ok?
       device = Device.find_or_create_by(identifier: params[:identifier])
       device.user = User.find_or_create_by(phone: phone)
+      device.user.update_attributes(name: params[:name]) if params[:name].present?
       device.user.regenerate_token_with_expiration
       device.save
       render json: {

@@ -16,6 +16,14 @@ secrets:edit`
 
 `docker-compose run -e RAILS_ENV=test web rspec`
 
+## Redis console
+
+`docker-compose run redis redis-cli -h redis`
+
+## Postgres console
+
+`docker-compose run db psql -h db -U postgres -d concrn_development`
+
 ## Running `rails` commands
 
 Use the oh-so-long but temporarily necessary invocation `docker-compose

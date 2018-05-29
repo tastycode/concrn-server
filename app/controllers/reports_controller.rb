@@ -1,12 +1,15 @@
 class ReportsController < ApplicationController
+  before_action :require_auth, only: %i(index)
+
   def create
     user = authenticate_token || authenticate_with_twilio || head(:unauthorized)
-    report =  Report.new(report_params[:attributes])
-    report.reporter = Reporter.find_or_create_by(user: user)
-    report.status = "new"
-    report.save
-
-    render json: report
+    report = Report.new(report_params[:attributes])
+    report = Report::Commands::Create.perform(user: user, report: report)
+    if report.valid?
+      render json: report
+    else
+      respond_with_errors(report)
+    end
   end
 
   def index
@@ -15,17 +18,21 @@ class ReportsController < ApplicationController
   end
 
   def authenticate_with_twilio
-    secret_key = Rails.application.secrets.twilio[:access_key]
-    authenticate_with_http_token do |token, options|
+    # TODO: Actually verify the request
+    # The docs show how this works with a simple flat hash, but we have deeply nested JSON due to JSONAPI
+    # https://www.twilio.com/docs/usage/security
+    request_is_valid = request.headers['X-Twilio-Signature'].present? && request.headers['User-Agent'] =~ /TwilioProxy/
+    if request_is_valid
       phone = PhoneNumber.normalize(report_params[:attributes][:reporter_phone])
-      secret_key == token && User.find_or_create_by(phone: phone)
+      User.find_or_create_by(phone: phone)
+    else
+      head :unauthorized
     end
   end
 
   def report_params
-    p request.headers
     params.require(:data).permit(:type, {
-      attributes: [:lat, :long, :address, :reporter_notes, :is_harm_immediate, :reporter_phone]
+      attributes: %i(lat long address zip reporter_notes is_harm_immediate source reporter_phone google_place_id)
     })
   end
 end

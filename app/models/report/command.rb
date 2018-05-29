@@ -1,0 +1,2 @@
+module Report::Command
+end

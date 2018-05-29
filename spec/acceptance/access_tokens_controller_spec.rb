@@ -39,7 +39,7 @@ resource 'Tokens' do
 
       example 'Provides a token' do
         do_request request
-        expect(json["jwt"]).to be_present
+        expect(json["data"]["attributes"]["jwt"]).to be_present
       end
     end
   end

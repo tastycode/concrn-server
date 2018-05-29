@@ -16,5 +16,5 @@ Rails.application.routes.draw do
     resources :users
   end
 
-  resources :reports, only: %i(create index)
+  resources :reports, only: %i(create index show)
 end

@@ -11,6 +11,8 @@ resource 'Reports' do
     parameter :address, "Address", required: true, scope: [:data, :attributes]
     parameter :reporter_notes, "Reporter's Notes", required: true, scope: [:data, :attributes]
     parameter :is_harm_immediate, "Is Harm Immediate?", required: true, scope: [:data, :attributes]
+    parameter :zip, "Address Zip", scope: [:data, :attributes]
+    parameter :google_place_id, "Google Place ID", scope: [:data, :attributes]
 
     post 'Creating a report' do
       header 'Authorization', :authorization
@@ -21,6 +23,8 @@ resource 'Reports' do
       let(:address) { "2729 Rampart St, New Orleans, LA 70117" }
       let(:reporter_notes) { "Joe doesn't look well today, he's taking apart his car looking for 'bugs'" }
       let(:is_harm_immediate) { false }
+      let(:zip) { "70117" }
+      let(:source) { "Concrn iOS 1.2" }
 
       let(:request) do
         {
@@ -31,7 +35,9 @@ resource 'Reports' do
               long: long,
               address: address,
               reporter_notes: address,
-              is_harm_immediate: is_harm_immediate
+              is_harm_immediate: is_harm_immediate,
+              zip: zip,
+              source: source
             }
           }
         }

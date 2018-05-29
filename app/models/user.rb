@@ -7,6 +7,10 @@ class User < ApplicationRecord
   has_secure_token :refresh_token
   has_secure_password validations: false
 
+  def name
+    super || "SMS User"
+  end
+
   def invalidate_token
     self.update_attributes(token: nil, token_issued_at: nil)
   end

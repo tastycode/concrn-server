@@ -1,0 +1,5 @@
+class ReportEvent < ApplicationRecord
+  belongs_to :report
+  REPORT_CREATED = "REPORT_CREATED"
+  RESPONDER_DISPATCH_ATTEMPTED = "RESPONDER_DISPATCH_ATTEMPTED"
+end

@@ -1,0 +1,2 @@
+class Dispatch < ApplicationRecord
+end

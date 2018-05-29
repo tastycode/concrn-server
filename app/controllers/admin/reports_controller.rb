@@ -1,5 +1,5 @@
 class Admin::ReportsController < Admin::Controller
-  MODEL = User
+  MODEL = Report
   PERMITTED_PARAMS = %i(name phone email password)
   default_actions(%i(show update destroy))
 
