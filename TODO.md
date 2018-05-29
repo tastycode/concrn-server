@@ -1,0 +1,20 @@
+- [ ] Dispatch should be requeued to check if more dispatching can be
+  done every 5 minutes until nothing can be done
+- [ ] Reporter should get confirmation text
+- [ ] Reporter should get "nothing can be done" text
+- [ ] Dispatch should trigger flow
+- [ ] Dispatch flow can accept report
+- [ ] Dispatch flow can reject report
+- [ ] Dispatch flow can mark arrival
+- [ ] Dispatch flow can close report
+- [ ] Deploy to heroku
+- [ ] Admin can add note
+- [ ] Admin can manually attempt dispatch
+- [ ] Admin can manually dispatch
+- [ ] Admin can update report status manually
+- [ ] Responder can mark report as refered
+  - list referral affiliates
+  - choose referral affiliates
+- [ ] Reporter can enter name in SMS flow
+- [ ] Responder can activate responder mode
+- [ ] Responder receives survey link with report join params
