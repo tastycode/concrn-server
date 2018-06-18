@@ -3,7 +3,7 @@ class ReportsController < ApplicationController
 
   def create
     user = authenticate_token || authenticate_with_twilio || head(:unauthorized)
-    report = Report.new(report_params[:attributes])
+    report = Report.new(report_params[:attributes].except(:reporter_phone))
     report = Report::Commands::Create.perform(user: user, report: report)
     if report.valid?
       render json: report
