@@ -18,15 +18,10 @@ class ReportsController < ApplicationController
   end
 
   def authenticate_with_twilio
-    # TODO: Actually verify the request
-    # The docs show how this works with a simple flat hash, but we have deeply nested JSON due to JSONAPI
-    # https://www.twilio.com/docs/usage/security
-    request_is_valid = request.headers['X-Twilio-Signature'].present? && request.headers['User-Agent'] =~ /TwilioProxy/
-    if request_is_valid
+    secret_key = Rails.application.secrets.twilio[:access_key]
+    authenticate_with_http_token do |token, options|
       phone = PhoneNumber.normalize(report_params[:attributes][:reporter_phone])
-      User.find_or_create_by(phone: phone)
-    else
-      head :unauthorized
+      secret_key == token && User.find_or_create_by(phone: phone)
     end
   end
 

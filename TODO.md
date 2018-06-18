@@ -1,5 +1,6 @@
 - [ ] Dispatch should be requeued to check if more dispatching can be
   done every 5 minutes until nothing can be done
+- [ ] Dispatch should be able to manage ziplist
 - [ ] Reporter should get confirmation text
 - [ ] Reporter should get "nothing can be done" text
 - [ ] Dispatch should trigger flow
