@@ -18,10 +18,16 @@ class ReportsController < ApplicationController
   end
 
   def authenticate_with_twilio
+    Rails.logger.info("entering authenticate with twilio")
     secret_key = Rails.application.secrets.twilio[:access_key]
-    authenticate_with_http_token do |token, options|
+    @current_user ||= authenticate_with_http_token do |token, options|
       phone = PhoneNumber.normalize(report_params[:attributes][:reporter_phone])
-      secret_key == token && User.find_or_create_by(phone: phone)
+      if secret_key == token
+        result = User.find_or_create_by(phone: phone)
+        result
+      else
+        return false
+      end
     end
   end
 

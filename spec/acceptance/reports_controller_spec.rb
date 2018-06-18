@@ -15,45 +15,80 @@ resource 'Reports' do
     parameter :google_place_id, "Google Place ID", scope: [:data, :attributes]
 
     post 'Creating a report' do
-      header 'Authorization', :authorization
-      let(:user) { build(:user) }
-      let(:authorization) { "Bearer #{user.token}" }
       let(:lat) { 30 }
       let(:long) { 90 }
       let(:address) { "2729 Rampart St, New Orleans, LA 70117" }
       let(:reporter_notes) { "Joe doesn't look well today, he's taking apart his car looking for 'bugs'" }
       let(:is_harm_immediate) { false }
       let(:zip) { "70117" }
-      let(:source) { "Concrn iOS 1.2" }
-
-      let(:request) do
-        {
-          data: {
-            type: 'report',
-            attributes: {
-              lat: lat,
-              long: long,
-              address: address,
-              reporter_notes: address,
-              is_harm_immediate: is_harm_immediate,
-              zip: zip,
-              source: source
+      before do
+        Rails.application.secrets.twilio = {access_key: "test"}
+      end
+      context 'via twilio auth' do
+        let(:source) { "sms" }
+        let(:authorization) { "Bearer #{Rails.application.secrets.twilio[:access_key]}" }
+        header 'Authorization', :authorization
+        let(:request) do
+          {
+            data: {
+              type: 'report',
+              attributes: {
+                lat: lat,
+                long: long,
+                address: address,
+                reporter_notes: address,
+                reporter_phone: '+14178930980',
+                zip: zip,
+                source: source
+              }
             }
           }
-        }
+        end
+
+        example 'Creates a report' do
+          do_request(request)
+          expect(status).to eq(200)
+          expect(json["data"]["id"].to_i).to eq(Report.last.id)
+          p json
+        end
       end
 
-      before do
-        user.regenerate_token_with_expiration
-        user.regenerate_refresh_token
-      end
+      context 'via token auth' do
+        let(:user) { build(:user) }
+        let(:source) { "Concrn iOS 1.2" }
+        header 'Authorization', :authorization
+        let(:authorization) { "Bearer #{user.token}" }
 
-      example 'Creates a report' do
-        do_request(request)
-        expect(status).to eq(200)
-        expect(json["data"]["id"].to_i).to eq(Report.last.id)
-      end
+        let(:request) do
+          {
+            data: {
+              type: 'report',
+              attributes: {
+                lat: lat,
+                long: long,
+                address: address,
+                reporter_notes: address,
+                is_harm_immediate: is_harm_immediate,
+                zip: zip,
+                source: source
+              }
+            }
+          }
+        end
 
+        before do
+          user.regenerate_token_with_expiration
+          user.regenerate_refresh_token
+        end
+
+        example 'Creates a report' do
+          do_request(request)
+          expect(status).to eq(200)
+          expect(json["data"]["id"].to_i).to eq(Report.last.id)
+        end
+
+
+      end
     end
   end
 end
