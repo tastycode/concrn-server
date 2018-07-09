@@ -1,6 +1,8 @@
 require "rails_helper"
 
 describe Report do
+  include ActiveJob::TestHelper
+
   let(:report) do
     Report.new(
       lat: 29.9705879,
@@ -60,6 +62,15 @@ describe Report do
         expect {
           Report::DispatchJob.perform_now(report_id: report.id)
         }.to have_enqueued_job(Report::DispatchAttemptJob).with(report_id: report.id, responder_id: responder.id, distance: 1000)
+      end
+
+      it "creates report events and sends messages" do
+        expect(ConcrnServer2.twilio).to receive_message_chain(:messages, :create)
+        expect {
+          perform_enqueued_jobs do
+            Report::DispatchJob.perform_now(report_id: report.id)
+          end
+        }.to change { report.reload.report_events.count }.from(1).to(2)
       end
     end
 

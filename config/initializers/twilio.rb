@@ -1,6 +1,7 @@
+require 'twilio-ruby'
 module ConcrnServer2
   def self.twilio
-    @twilio ||= Twilio::Rest::Client.new(
+    @twilio ||= Twilio::REST::Client.new(
       Rails.application.secrets.twilio[:sid],
       Rails.application.secrets.twilio[:token]
     ).tap do |client|

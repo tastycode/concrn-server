@@ -49,7 +49,18 @@ resource 'Reports' do
           do_request(request)
           expect(status).to eq(200)
           expect(json["data"]["id"].to_i).to eq(Report.last.id)
-          p json
+        end
+
+        context 'Creating a report without a zip' do
+          before do
+            request[:data][:attributes][:zip] = nil
+          end
+
+          example 'Creates a report while queueing a zip resolving job' do
+            expect {
+              do_request(request)
+            }.to enqueue_job(Report::ResolveZipJob)
+          end
         end
       end
 
