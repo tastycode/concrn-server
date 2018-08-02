@@ -7,6 +7,16 @@ class User < ApplicationRecord
   has_secure_token :refresh_token
   has_secure_password validations: false
 
+  before_save :ensure_role_persists_records
+
+  def ensure_role_persists_records
+    if role == "affiliate_responder"
+      self.responder = Responder.new(
+        user: self
+      )
+    end
+  end
+
   def name
     super || "SMS User"
   end

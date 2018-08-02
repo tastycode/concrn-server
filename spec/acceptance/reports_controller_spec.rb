@@ -24,6 +24,7 @@ resource 'Reports' do
       before do
         Rails.application.secrets.twilio = {access_key: "test"}
       end
+
       context 'via twilio auth' do
         let(:source) { "sms" }
         let(:authorization) { "Bearer #{Rails.application.secrets.twilio[:access_key]}" }
@@ -63,6 +64,7 @@ resource 'Reports' do
           end
         end
       end
+
 
       context 'via token auth' do
         let(:user) { build(:user) }

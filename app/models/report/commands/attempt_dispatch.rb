@@ -2,7 +2,7 @@ class Report::Commands::AttemptDispatch < Command
   required_params :report, :responder
   optional_params :distance
   def perform
-    dispatch = Dispatch.create(
+    dispatch = ::Dispatch.create(
       dispatch_type: "AUTO",
       report: report,
       responder: responder,
@@ -10,10 +10,20 @@ class Report::Commands::AttemptDispatch < Command
     )
 
     # send text to responder
-    ConcrnServer2.twilio.messages.create(
-      from: ConcrnServer2.twilio.phone,
-      to: responder.user.phone,
-      body: dispatch_message_body
+    response = ConcrnServer2.twilio
+      .studio
+      .flows(ENV['TWILIO_FLOW_OUTGOING_ID'])
+      .engagements
+      .create(
+        from: ConcrnServer2.twilio.phone,
+        to: responder.user.phone,
+        parameters: {
+          report_id: report.id,
+          report_reporter_user_name: report.reporter.user.name,
+          report_reporter_user_phone: report.reporter.user.phone,
+          report_address: report.address,
+          report_reporter_notes: report.reporter_notes
+        }.to_json
     )
 
     report.report_events << report_event

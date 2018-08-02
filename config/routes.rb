@@ -14,6 +14,8 @@ Rails.application.routes.draw do
     resources :affiliates
     resources :reports
     resources :users
+    resources :zip_fences
+    resources :report_events
   end
 
   resources :reports, only: %i(create index show)

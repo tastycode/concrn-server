@@ -6,8 +6,7 @@ class Admin::UsersController < Admin::Controller
 
   def default_serializer_options
     {
-      include: %w(affiliate)
-
+      include: %w(affiliate responder)
     }
   end
 
