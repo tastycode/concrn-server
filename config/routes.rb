@@ -18,5 +18,6 @@ Rails.application.routes.draw do
     resources :report_events
   end
 
-  resources :reports, only: %i(create index show)
+  resources :reports, only: %i(create index show update)
+  resources :dispatches, only: %i(update)
 end

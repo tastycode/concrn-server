@@ -25,6 +25,7 @@ class DevicesController  < ApplicationController
             refresh_token: device.user.refresh_token
       }, status: :created
     else
+      p result
       head :bad_request
     end
   end

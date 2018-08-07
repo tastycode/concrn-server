@@ -22,4 +22,5 @@ class ApplicationController < ActionController::API
       User.where("token_issued_at > ?", TOKEN_TIMEOUT.ago).find_by(token: token)
     end
   end
+
 end

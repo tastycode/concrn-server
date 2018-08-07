@@ -19,12 +19,15 @@ class Report::Commands::AttemptDispatch < Command
         to: responder.user.phone,
         parameters: {
           report_id: report.id,
+          dispatch_id: dispatch.id,
           report_reporter_user_name: report.reporter.user.name,
           report_reporter_user_phone: report.reporter.user.phone,
           report_address: report.address,
           report_reporter_notes: report.reporter_notes
         }.to_json
     )
+
+    p response
 
     report.report_events << report_event
     report.tap(&:save)
