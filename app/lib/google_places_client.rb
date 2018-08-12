@@ -1,6 +1,6 @@
 class GooglePlacesClient
   def self.place_details(place_id)
-    key = Rails.application.secrets.google_places[:key]
+    key = Secrets.google_places_key
     json = Faraday
       .get("https://maps.googleapis.com/maps/api/place/details/json?placeid=#{place_id}&key=#{key}")
       .body

@@ -16,7 +16,7 @@ class DispatchesController < ApplicationController
   end
 
   def authenticate_twilio_request
-    secret_key = Rails.application.secrets.twilio[:access_key]
+    secret_key = Secrets.twilio_access_key
     authenticated = authenticate_with_http_token do |token, options|
       return secret_key == token
     end
