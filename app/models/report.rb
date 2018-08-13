@@ -4,6 +4,12 @@ class Report < ApplicationRecord
   has_many :report_events, autosave: true
   has_many :dispatches
 
+  STATUS_NEW = "NEW"
+  STATUS_ASSIGNED = "ASSIGNED"
+  STATUS_ARRIVED = "ARRIVED"
+  STATUS_DISMISSED = "DISMISSED"
+  STATUS_CLOSED = "CLOSED"
+
   ZipMissingError = Class.new(StandardError)
 
   # high-level actions

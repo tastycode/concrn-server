@@ -3,7 +3,7 @@ class Report::Commands::Create < Command
 
   def perform
     report.reporter = Reporter.find_or_create_by(user: user)
-    report.status = "new"
+    report.status = Report::STATUS_NEW
     report.report_events << report_event
     if report.save
       report.resolve_zip! unless report.zip.present?

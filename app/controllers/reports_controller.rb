@@ -2,8 +2,11 @@ class ReportsController < ApplicationController
   before_action :require_auth, only: %i(index)
 
   def create
-    user = authenticate_token || authenticate_reporter_with_twilio || head(:unauthorized)
-    Rails.logger.info("ReportsController#create user: #{user}")
+    user = authenticate_token
+    if !user
+      user = authenticate_reporter_with_twilio
+      return head(:unauthorized) if !user
+    end
     report = Report.new(report_params[:attributes].except(:reporter_phone))
     report = Report::Commands::Create.perform(user: user, report: report)
     if report.valid?
@@ -25,13 +28,14 @@ class ReportsController < ApplicationController
   end
 
   def authenticate_reporter_with_twilio
-    Rails.logger.info("entering authenticate with twilio")
     secret_key = Secrets.twilio_access_key
+    request.headers.each { |key, value|  Rails.logger.info("auth header #{key}: #{value}") }
+
     @current_user ||= authenticate_with_http_token do |token, options|
       phone = PhoneNumber.normalize(report_params[:attributes][:reporter_phone])
       if secret_key == token
         result = User.find_or_create_by(phone: phone)
-        result
+        return result
       else
         return false
       end

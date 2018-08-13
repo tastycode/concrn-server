@@ -4,23 +4,23 @@ class Dispatch::Commands::Update < Command
   def perform
     report.report_events << dispatch_answered_event
     case report.status
-    when "PENDING"
-      if updates[:status] == "ACCEPTED"
+    when Report::STATUS_NEW
+      if updates[:status] == Dispatch::STATUS_ACCEPTED
         dispatch.update_attributes(updates)
         report.update_attributes(
           responder: dispatch.responder,
-          status: "ASSIGNED"
+          status: Report::STATUS_ASSIGNED
           )
         report.report_events << dispatch_accepted_event
-      elsif updates[:status] == "DISMISSED"
+      elsif updates[:status] == Dispatch::STATUS_DISMISSED
         dispatch.update_attributes(updates)
         report.update_attributes(
-          status: "DISMISSED"
+          status: Report::STATUS_DISMISSED
         )
         report.report_events << dispatch_dismissed_event
       end
-    when /ASSIGNED|DISMISSED/
-      if updates[:status] =~ /ACCEPTED|DISMISSED/
+    when /#{Report::STATUS_ASSIGNED}|#{Report::STATUS_DISMISSED}/
+      if updates[:status] =~ /#{Dispatch::STATUS_ACCEPTED}|#{Dispatch::STATUS_DISMISSED}/
         dispatch.update_attributes(status: "STALE")
         return update_fail(:status, :dispatch_stale)
       end

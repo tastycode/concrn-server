@@ -23,9 +23,17 @@ payload {
   responder_user_name: "joe",
   responder_user_phone: ""
 }
-event_type: RESPONDER_DISPATCH_UPDATED
+event_type: RESPONDER_DISPATCH_ATTEMPT
 {
-  reason_type: "NO_RESPONSE|PASSED|DISMISSED|REFERRED|ACCEPTED"
+  dispatch_status: "NO_RESPONSE|PASSED|DISMISSED|REFERRED|ACCEPTED"
+}
+
+event_type: RESPONDER_DISPATCH_ANSWERED
+payload: {
+  responder_user_id,
+  responder_user_name,
+  responder_affiliate_name
+
 }
 
 event_type: RESPONDER_DISPATCHED
@@ -69,19 +77,29 @@ class Report
 // class ReportNote
  user_id:
  notes:
+ status: PENDING | ASSIGNED | ARRIVED | CLOSED
 
 class Affiliate
   survey_url
+
 class Dispatch
   dispatch_type: AUTO | MANUAL
   user_id?:
   responder_id
   report_id
-  status: "PENDING|PASSED|NO_RESPONSE|REFERRED|ACCEPTED|DISMISSED|CLOSED"
+  status: "PENDING|PASSED|STALE|NO_RESPONSE|REFERRED|ACCEPTED|DISMISSED|CLOSED"
 
 // class Referral
   user_id
   affiliate_id
   notes
 
+## Responder flow options
+
+Are you available to handle this crisis? If we don't hear back from you, we'll keep trying to contact other responders.
+
+Text us back one of the following responses.
+
+accept - We'll let the reporter know you are on the way
+dismiss - Something is wrong with this report, we'll get your feedback and close the report
 

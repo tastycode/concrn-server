@@ -6,7 +6,7 @@ class Report::Commands::AttemptDispatch < Command
       dispatch_type: "AUTO",
       report: report,
       responder: responder,
-      status: "PENDING"
+      status: Dispatch::STATUS_PENDING,
     )
 
     # send text to responder

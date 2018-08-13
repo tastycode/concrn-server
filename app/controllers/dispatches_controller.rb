@@ -1,9 +1,9 @@
 class DispatchesController < ApplicationController
   def update
     dispatch = Dispatch.find(params[:id])
-    dispatch = Dispatch::Commands::Update.perform(dispatch: dispatch, updates: dispatch_params)
+    dispatch = Dispatch::Commands::Update.perform(dispatch: dispatch, updates: dispatch_params[:attributes])
     if dispatch.errors.none?
-      render json: report
+      render json: dispatch
     else
       respond_with_errors(dispatch)
     end
