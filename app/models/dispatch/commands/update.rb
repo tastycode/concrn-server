@@ -24,8 +24,27 @@ class Dispatch::Commands::Update < Command
         dispatch.update_attributes(status: "STALE")
         return update_fail(:status, :dispatch_stale)
       end
+      if updates[:status] == Dispatch::STATUS_ARRIVED
+        dispatch.update_attributes(updates)
+        report.update_attributes(
+          status: Report::STATUS_ARRIVED
+        )
+        report.report_events << dispatch_arrived_event
+      end
+    when Report::STATUS_ARRIVED
+      if updates[:status] == Dispatch::STATUS_CLOSED
+        dispatch.update_attributes(updates)
+        report.update_attributes(
+          status: Report::STATUS_CLOSED
+        )
+        report.report_events << dispatch_closed_event
+      end
     end
 
+    if !report.valid?
+      Rails.logger.info("Report invalid on dispatch")
+      p report.errors.full_messages
+    end
     report.save
     dispatch
   end
@@ -48,6 +67,17 @@ class Dispatch::Commands::Update < Command
     )
   end
 
+  def dispatch_closed_event
+    report.report_events.build(
+      event_type: ReportEvent::RESPONDER_CLOSED,
+      payload: {
+        responder_user_name: dispatch.responder.user.name,
+        responder_user_id: dispatch.responder.user.id,
+        responder_user_phone: dispatch.responder.user.phone
+      }
+    )
+  end
+
   def dispatch_accepted_event
     report.report_events.build(
       event_type: ReportEvent::RESPONDER_DISPATCHED,
@@ -58,6 +88,13 @@ class Dispatch::Commands::Update < Command
         responder_user_id: dispatch.responder.user.id,
         responder_user_phone: dispatch.responder.user.phone
       }
+    )
+  end
+
+  def dispatch_arrived_event
+    report.report_events.build(
+      event_type: ReportEvent::RESPONDER_ARRIVED,
+      payload: {}
     )
   end
 
