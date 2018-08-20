@@ -3,6 +3,7 @@ class DevicesController  < ApplicationController
     # create a new device with this device id and phone number, trigger verification
     phone = PhoneNumber.normalize(params[:phone])
     result = Authy::PhoneVerification.start(via: "sms", country_code: 1, phone_number: phone)
+    p result
     if result.ok?
       head :ok
     else

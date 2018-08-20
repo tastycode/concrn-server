@@ -1,6 +1,5 @@
-if Rails.env.test? # so sorry, rspec within docker isn't picking up the encrypted secrets
-  Authy.api_key = "test"
-else
-  Secrets.authy_key
-end
+p "config/initializers/authy.rb"
+Authy.api_key = Secrets.authy_key
+p "Secrets.authy_key", Secrets.authy_key
+p "Authy.api_key", Authy.api_key
 Authy.api_uri = 'https://api.authy.com/'
