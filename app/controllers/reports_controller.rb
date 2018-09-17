@@ -17,7 +17,9 @@ class ReportsController < ApplicationController
   end
 
   def index
+    Rails.logger.info("entering reportList")
     reports = current_user.reporter.reports.order("created_at desc")
+    Rails.logger.info("Preparing to render report list #{reports}")
     render json: reports
   end
 

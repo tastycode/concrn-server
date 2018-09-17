@@ -18,7 +18,9 @@ class ApplicationController < ActionController::API
   end
 
   def authenticate_token
+    Rails.logger.info("authenticating token #{request.headers['Authorization']}")
     @current_user ||= authenticate_with_http_token do |token, options|
+      Rails.logger.info("Finding user with token #{token}")
       User.where("token_issued_at > ?", TOKEN_TIMEOUT.ago).find_by(token: token)
     end
   end
