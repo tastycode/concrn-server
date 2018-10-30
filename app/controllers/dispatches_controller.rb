@@ -1,4 +1,16 @@
 class DispatchesController < ApplicationController
+  def create
+    report = Report.find(params[:data][:attributes][:report_id])
+    responder = Responder.find_by(user_id: params[:data][:attributes][:responder_user_id])
+    attempt_dispatch = Report::Commands::AttemptDispatch.perform(report: report, responder: responder)
+    render(json: {
+      data: {
+        id: attempt_dispatch.dispatch.id,
+        type: 'dispatches'
+      }
+    })
+  end
+
   def update
     dispatch = Dispatch.find(params[:id])
     dispatch = Dispatch::Commands::Update.perform(dispatch: dispatch, updates: dispatch_params[:attributes])

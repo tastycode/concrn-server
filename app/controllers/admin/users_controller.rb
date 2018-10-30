@@ -10,6 +10,22 @@ class Admin::UsersController < Admin::Controller
     }
   end
 
+  def index
+    users = User.all.order("name")
+    if params[:filter] && params[:filter][:q]
+      users = users.where("name like :search", search: "%#{params[:filter][:q]}%")
+    end
+    if params[:filter]
+      if params[:filter][:q]
+      end
+    end
+
+    render json: jsonapi_index_response(
+      scope: users,
+      url_method: :admin_users_path
+    )
+  end
+
   def default_scope
     current_user.affiliate? ?
       current_user.affiliate.users :

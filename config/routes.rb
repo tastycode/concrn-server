@@ -16,8 +16,9 @@ Rails.application.routes.draw do
     resources :users
     resources :zip_fences
     resources :report_events
+    resources :report_notes
   end
 
   resources :reports, only: %i(create index show update)
-  resources :dispatches, only: %i(update)
+  resources :dispatches, only: %i(update create)
 end

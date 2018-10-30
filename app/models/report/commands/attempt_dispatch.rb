@@ -1,8 +1,11 @@
 class Report::Commands::AttemptDispatch < Command
   required_params :report, :responder
   optional_params :distance
+
+  attr_accessor :dispatch
+
   def perform
-    dispatch = ::Dispatch.create(
+    self.dispatch = ::Dispatch.create(
       dispatch_type: "AUTO",
       report: report,
       responder: responder,
@@ -30,7 +33,8 @@ class Report::Commands::AttemptDispatch < Command
     p response
 
     report.report_events << report_event
-    report.tap(&:save)
+    report.save
+    self
   end
 
   def dispatch_message_body
