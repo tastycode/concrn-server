@@ -12,6 +12,9 @@ class Admin::UsersController < Admin::Controller
 
   def index
     users = User.all.order("name")
+    if current_user.affiliate?
+      users = users.where(affiliate: current_user.affiliate)
+    end
     if params[:filter] && params[:filter][:q]
       users = users.where("name like :search", search: "%#{params[:filter][:q]}%")
     end

@@ -18,7 +18,7 @@ class Report::Commands::AttemptDispatch < Command
       .flows(ENV['TWILIO_FLOW_OUTGOING_ID'])
       .engagements
       .create(
-        from: ConcrnServer2.twilio.phone,
+        from: ConcrnServer2.twilio.responder_phone,
         to: responder.user.phone,
         parameters: {
           report_id: report.id,
@@ -29,8 +29,6 @@ class Report::Commands::AttemptDispatch < Command
           report_reporter_notes: report.reporter_notes
         }.to_json
     )
-
-    p response
 
     report.report_events << report_event
     report.save

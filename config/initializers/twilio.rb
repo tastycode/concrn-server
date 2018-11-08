@@ -5,8 +5,12 @@ module ConcrnServer2
       Secrets.twilio_sid,
       Secrets.twilio_token
     ).tap do |client|
-      def client.phone
-        ENV['TWILIO_PHONE']
+      def client.responder_phone
+        ENV['TWILIO_RESPONDER_PHONE']
+      end
+
+      def client.reporter_phone
+        ENV['TWILIO_REPORTER_PHONE']
       end
     end
   end
